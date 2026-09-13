@@ -1,4 +1,5 @@
 """TPL-1, TPL-2, AGT-8, SES-1..3: the template renders, CLAUDE.md is short, the summary is honest."""
+import pytest
 import subprocess
 from pathlib import Path
 
@@ -66,3 +67,30 @@ def test_template_pyproject_declares_packages_explicitly():
     """A flat layout with app/, deploy/, project/ and migrations/ needs explicit discovery or pip refuses to build."""
     txt = (PLATFORM_ROOT / "templates" / "flask-web" / "pyproject.toml").read_text()
     assert "[build-system]" in txt and 'include = ["app*"]' in txt and 'py-modules = ["config"]' in txt
+
+
+def test_new_project_purpose_with_colon_and_quotes(tmp_path, monkeypatch):
+    """A purpose like 'Run a process: intake "requests"' must not break profile.yaml, target.yml or pyproject."""
+    from devcli import commands, gitops
+    monkeypatch.setattr(commands, "IDENTITY_ROOTS", {"as2": tmp_path, "company": tmp_path / "c"})
+    monkeypatch.setattr(commands.prereq, "check", lambda **k: ["fake"])
+    monkeypatch.setattr(gitops, "signing_email", lambda p: "t@t")
+    real_run = gitops.run
+    monkeypatch.setattr(gitops, "run", lambda args, cwd=None, check=True: real_run(["git", "-c", "user.email=t@t", "-c", "user.name=t", *args[1:]], cwd, check) if args[0] == "git" else real_run(args, cwd, check))
+    rc = commands.new("flask", "as2", {"name": "colon-app", "purpose": 'Run a process: intake "requests", plan them'}, interactive=False, github=False, launch=False)
+    assert rc == 0
+    dest = tmp_path / "colon-app"
+    assert load_profile(dest)["purpose"].startswith("Run a process: intake")
+    assert (dest / ".git").exists()
+    import tomllib
+    tomllib.loads((dest / "pyproject.toml").read_text())
+
+
+def test_failed_new_project_leaves_nothing(tmp_path, monkeypatch):
+    from devcli import commands
+    monkeypatch.setattr(commands, "IDENTITY_ROOTS", {"as2": tmp_path, "company": tmp_path / "c"})
+    monkeypatch.setattr(commands.prereq, "check", lambda **k: ["fake"])
+    monkeypatch.setattr(commands.gitops, "init_with_branches", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("boom")))
+    with pytest.raises(RuntimeError):
+        commands.new("flask", "as2", {"name": "boom-app", "purpose": "p"}, interactive=False, github=False, launch=False)
+    assert not (tmp_path / "boom-app").exists()

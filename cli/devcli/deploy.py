@@ -237,8 +237,8 @@ def list_projects() -> int:
             try:
                 p = load_profile(d); t = load_target(d)
                 rows.append((p["name"], ident, t["kind"], t.get("host", "-"), "ok"))
-            except DevError as e:
-                rows.append((d.name, ident, "?", "?", "invalid: " + str(e).split(":")[-1].strip()))
+            except Exception as e:  # a broken file must never hide the other projects
+                rows.append((d.name, ident, "?", "?", "invalid: " + str(e).splitlines()[0][:80]))
     if not rows:
         print("no platform projects found under " + ", ".join(str(r) for r in IDENTITY_ROOTS.values()))
         return 0

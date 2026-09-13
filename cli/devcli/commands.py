@@ -30,23 +30,28 @@ def new(kind: str, target: str, answers: dict | None, interactive: bool, github:
         "__PLATFORM_VERSION__": platform_version(),
         "__PLATFORM_PATH__": str(PLATFORM_ROOT),
     }
-    scaffold.render(kind, dest, subs)
-    # branch names and data sources from answers
     import yaml
-    tpath = dest / "deploy" / "target.yml"
-    t = yaml.safe_load(tpath.read_text())
-    for env, b in zip(("dev", "cert", "prod"), branches):
-        t["environments"][env]["branch"] = b
-    tpath.write_text(yaml.safe_dump(t, sort_keys=False))
-    ppath = dest / "project" / "profile.yaml"
-    p = yaml.safe_load(ppath.read_text())
-    p["data_sources"] = a["data_sources"]
-    if a.get("constraints"):
-        p["constraints"] = a["constraints"]
-    ppath.write_text(yaml.safe_dump(p, sort_keys=False))
-    load_profile(dest)
-    load_target(dest)
-    gitops.init_with_branches(dest, branches, f"Create {a['name']} from the development platform")
+    # Text substitution is safe for Markdown and Python but not for YAML/TOML; the purpose may hold
+    # colons or quotes. Substitute an escaped form, then rewrite the YAML files from data.
+    subs["__PROJECT_PURPOSE__"] = a["purpose"].replace('"', "'")
+    try:
+        scaffold.render(kind, dest, subs)
+        tpath = dest / "deploy" / "target.yml"
+        t = {"kind": "service", "identity": identity, "host": a["host"],
+             "environments": {env: {"branch": b, "path": f"/platform/{env}/{a['name']}/"} for env, b in zip(("dev", "cert", "prod"), branches)}}
+        tpath.write_text("# Where this project runs. Committed, so it is never guesswork. Validated by registries/schema/target.schema.json.\n" + yaml.safe_dump(t, sort_keys=False))
+        ppath = dest / "project" / "profile.yaml"
+        p = {"name": a["name"], "purpose": a["purpose"], "type": a["type"], "stack": a["stack"],
+             "data_sources": a["data_sources"], "platform_version": platform_version()}
+        if a.get("constraints"):
+            p["constraints"] = a["constraints"]
+        ppath.write_text(yaml.safe_dump(p, sort_keys=False, allow_unicode=True))
+        load_profile(dest)
+        load_target(dest)
+        gitops.init_with_branches(dest, branches, f"Create {a['name']} from the development platform")
+    except Exception:
+        shutil.rmtree(dest, ignore_errors=True)  # never leave a half-made project behind
+        raise
     email = gitops.signing_email(dest)
     if not email:
         raise DevError(f"git identity not resolved in {dest}; refusing (CLI-5)", 2)
