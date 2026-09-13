@@ -129,9 +129,9 @@ def approve(project: Path, env: str, verify_only: bool) -> int:
     print("PRODUCTION APPROVAL — type each value exactly (DEP-5).")
     print(f"  repo    : {_repo_name(project)}\n  commit  : {sha}\n  branch  : {branch}\n  env     : {env}\n  target  : {target['host']}")
     print("  migrations since last prod deploy: " + (", ".join(migs) if migs else "none"))
-    typed = input("Type the first 12 characters of the commit to approve: ").strip()
-    if typed != sha[:12]:
-        raise DevError("approval refused: commit mismatch", 2)
+    typed = input("Type the commit to approve (at least its first 12 characters): ").strip()
+    if len(typed) < 12 or not sha.startswith(typed):
+        raise DevError(f"approval refused: '{typed[:12]}' does not match HEAD {sha[:12]}", 2)
     backup = input("Backup/snapshot taken or not needed? state it: ").strip()
     rollback = input("Rollback plan (default: dev rollback prod): ").strip() or "dev rollback prod"
     if migs:
