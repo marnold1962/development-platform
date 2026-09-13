@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: devcli
+Version: 0.1.0
+Summary: Ignition key for the development platform. Small and deterministic; Claude Code is the intelligence.
+Requires-Python: >=3.12
+Requires-Dist: pyyaml>=6.0
+Requires-Dist: jsonschema>=4.20
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"

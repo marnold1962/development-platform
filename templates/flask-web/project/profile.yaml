@@ -1,0 +1,6 @@
+name: __PROJECT_NAME__
+purpose: __PROJECT_PURPOSE__
+type: flask-web
+stack: [python, flask, blueprints, jinja, htmx, postgresql, alembic, pytest]
+data_sources: []
+platform_version: "__PLATFORM_VERSION__"

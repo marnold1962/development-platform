@@ -1,0 +1,5 @@
+# Server and container mappings. Filled in increment 2 by inspection.
+# Q5 (Matt, 2026-09-13): two main development environments on AWS run as
+# separate containers: QA Operations and IN Analytics. Their hosts and
+# container names are recorded here when inspected, not from memory.
+containers: {}

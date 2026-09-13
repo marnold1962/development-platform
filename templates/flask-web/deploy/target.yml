@@ -1,0 +1,8 @@
+# Where this project runs. Committed, so it is never guesswork. Validated by registries/schema/target.schema.json.
+kind: service
+identity: __IDENTITY__
+host: __HOST__
+environments:
+  dev:  { branch: dev,  path: /platform/dev/__PROJECT_NAME__/ }
+  cert: { branch: cert, path: /platform/cert/__PROJECT_NAME__/ }
+  prod: { branch: main, path: /platform/prod/__PROJECT_NAME__/ }

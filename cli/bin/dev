@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Launcher for the dev CLI. Resolves the platform working copy from this file's location.
+here="$(cd "$(dirname "$(readlink -f "$0")")/../.." && pwd)"
+exec "$here/.venv/bin/python" -m devcli "$@"

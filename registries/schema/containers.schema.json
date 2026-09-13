@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "registries/containers.yaml",
+  "type": "object", "additionalProperties": false,
+  "required": ["containers"],
+  "properties": {
+    "containers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object", "additionalProperties": false,
+        "required": ["host", "environment"],
+        "properties": {
+          "host": {"type": "string"},
+          "environment": {"type": "string"},
+          "application": {"type": "string"},
+          "note": {"type": "string"}
+        }
+      }
+    }
+  }
+}

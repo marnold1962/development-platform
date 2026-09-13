@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "development-platform/target",
+  "title": "deploy/target.yml",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["kind", "identity"],
+  "properties": {
+    "kind": {"type": "string", "enum": ["service", "desktop"]},
+    "identity": {"type": "string", "enum": ["as2", "company"], "description": "Git identity folder the project lives under"},
+    "host": {"type": "string", "description": "Logical name of an entry in registries/environments.yaml. Required when kind is service."},
+    "environments": {
+      "type": "object", "additionalProperties": false,
+      "required": ["dev", "cert", "prod"],
+      "properties": {
+        "dev":  {"$ref": "#/$defs/env"},
+        "cert": {"$ref": "#/$defs/env"},
+        "prod": {"$ref": "#/$defs/env"}
+      }
+    },
+    "connects_to": {
+      "type": "object", "additionalProperties": false,
+      "required": ["host", "environment"],
+      "properties": {
+        "host": {"type": "string"},
+        "environment": {"type": "string", "enum": ["dev", "cert", "prod"]},
+        "via": {"type": "string"},
+        "ports": {"type": "array", "items": {"type": "integer"}}
+      }
+    }
+  },
+  "allOf": [
+    {"if": {"properties": {"kind": {"const": "service"}}}, "then": {"required": ["host", "environments"]}}
+  ],
+  "$defs": {
+    "env": {
+      "type": "object", "additionalProperties": false,
+      "required": ["branch", "path"],
+      "properties": {
+        "branch": {"type": "string", "pattern": "^[A-Za-z0-9._/-]+$"},
+        "path": {"type": "string", "pattern": "^/.*/$", "description": "URL path prefix on the host router, with leading and trailing slash"}
+      }
+    }
+  }
+}

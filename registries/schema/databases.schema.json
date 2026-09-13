@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "registries/databases.yaml",
+  "type": "object", "additionalProperties": false,
+  "required": ["databases"],
+  "properties": {
+    "databases": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object", "additionalProperties": false,
+        "required": ["engine", "host", "access"],
+        "properties": {
+          "engine": {"type": "string", "enum": ["postgresql", "sqlserver", "clickhouse", "sqlite", "bigquery"]},
+          "host": {"type": "string", "description": "Logical host name from environments.yaml or containers.yaml"},
+          "database": {"type": "string"},
+          "access": {"type": "string", "enum": ["read-only", "read-write"], "description": "Approved access mode for the platform"},
+          "reach": {"type": "string", "description": "How to reach it, without secrets: tunnel name, port"},
+          "verified": {"type": "string", "format": "date", "description": "Date the entry was checked by inspection"}
+        }
+      }
+    }
+  }
+}

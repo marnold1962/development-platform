@@ -1,0 +1,58 @@
+# New-project questionnaire (design section 14). At most eleven items; anything a
+# registry or template can answer is defaulted, not asked (CFG-8).
+# Each item: key, prompt, kind (text|choice|bool|list), default source, and which
+# configuration field it writes.
+items:
+  - key: name
+    prompt: Project name (lowercase, hyphens)
+    kind: text
+    writes: profile.name
+  - key: purpose
+    prompt: One-line purpose
+    kind: text
+    writes: profile.purpose
+  - key: type
+    prompt: Application type
+    kind: choice
+    choices: [flask-web, python-desktop, cpp-desktop, api, cli, other]
+    default_from: cli_argument
+    writes: profile.type
+  - key: repo_mode
+    prompt: GitHub repository
+    kind: choice
+    choices: [new-private, existing]
+    default: new-private
+  - key: stack
+    prompt: Primary technology choices
+    kind: list
+    default_from: template
+    writes: profile.stack
+  - key: local_db
+    prompt: Local application database?
+    kind: choice
+    choices: [postgresql, sqlite, none]
+    default: postgresql
+  - key: data_sources
+    prompt: External data sources (logical names from the database registry) with access mode
+    kind: list
+    default: []
+    writes: profile.data_sources
+  - key: host
+    prompt: Hosting target
+    kind: choice
+    default_from: registry.environments.hosts
+    writes: target.host
+  - key: environments
+    prompt: Required environments
+    kind: list
+    default: [local, dev, cert, prod]
+  - key: branches
+    prompt: Branch names for dev / cert / prod
+    kind: list
+    default: [dev, cert, main]
+    writes: target.environments.*.branch
+  - key: constraints
+    prompt: Project-specific constraints or business rules
+    kind: list
+    default: []
+    writes: profile.constraints

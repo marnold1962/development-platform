@@ -1,0 +1,3 @@
+# Database registry. Filled in increment 2 by inspection (REG-4, REG-5).
+# "QA" and "Analytics" appear only as labels on entries named by what they are.
+databases: {}

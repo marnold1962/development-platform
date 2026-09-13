@@ -1,0 +1,6 @@
+# Known repositories and their roles.
+repositories:
+  development-platform:
+    role: platform
+    github: marnold1962/development-platform
+    identity: as2

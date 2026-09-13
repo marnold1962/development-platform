@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>__PROJECT_NAME__</h1>
+<div id="greeting" hx-get="/" hx-trigger="every 30s" hx-swap="innerHTML">
+  {% include "partials/greeting.html" %}
+</div>
+{% endblock %}

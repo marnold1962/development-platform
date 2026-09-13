@@ -1,0 +1,29 @@
+[project]
+name = "__PROJECT_NAME__"
+version = "0.1.0"
+description = "__PROJECT_PURPOSE__"
+requires-python = ">=3.12"
+dependencies = [
+  "flask>=3.0",
+  "sqlalchemy>=2.0",
+  "flask-sqlalchemy>=3.1",
+  "alembic>=1.13",
+  "psycopg[binary]>=3.1",
+  "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-cov>=5.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["config"]
+
+[tool.setuptools.packages.find]
+include = ["app*"]

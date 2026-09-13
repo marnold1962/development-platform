@@ -1,0 +1,13 @@
+# Hosting targets. Logical names only; no credentials.
+# D6 (Matt, 2026-09-13): the first hosting target is AS2.
+hosts:
+  as2:
+    description: Home server. First hosting target (D6).
+    reach:
+      - ssh: home
+        note: LAN
+      - ssh: as2-cf
+        note: Cloudflare tunnel
+    deploy_root: /srv/platform
+    router_prefix: /platform/
+    environments: [dev, cert, prod]

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "development-platform/profile",
+  "title": "project/profile.yaml",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "purpose", "type", "stack", "data_sources", "platform_version"],
+  "properties": {
+    "name": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,39}$", "description": "Project name; also the repository and folder name."},
+    "purpose": {"type": "string", "minLength": 1, "maxLength": 300},
+    "type": {"type": "string", "enum": ["flask-web", "python-desktop", "cpp-desktop", "api", "cli", "other"]},
+    "stack": {
+      "type": "array", "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "data_sources": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["name", "access"],
+        "properties": {
+          "name": {"type": "string", "description": "Logical name of an entry in registries/databases.yaml"},
+          "access": {"type": "string", "enum": ["read-only", "read-write"]}
+        }
+      }
+    },
+    "platform_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "constraints": {"type": "array", "items": {"type": "string"}, "description": "Project-specific business or architecture constraints"}
+  }
+}

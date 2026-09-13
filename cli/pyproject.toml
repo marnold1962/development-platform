@@ -1,0 +1,23 @@
+[project]
+name = "devcli"
+version = "0.1.0"
+description = "Ignition key for the development platform. Small and deterministic; Claude Code is the intelligence."
+requires-python = ">=3.12"
+dependencies = ["pyyaml>=6.0", "jsonschema>=4.20"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+dev = "devcli.main:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["devcli*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
