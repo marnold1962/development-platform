@@ -2,7 +2,8 @@
 
 | | |
 |---|---|
-| **Status** | Draft for review. Derived from `Claude_Code_Development_Platform.md` (2026-09-13). |
+| **Status** | Built through increment 3 on 2026-09-13. Items marked "later" (US-32, US-33) remain open. Derived from `Claude_Code_Development_Platform.md` (2026-09-13). |
+| **Built** | v0.1.0 (increment 1), v0.2.0 (increment 2), v0.3.0 and v0.3.1 (increment 3). Verified with platform-console. |
 | **Date** | 2026-09-13 |
 | **Scope** | Fresh start. No earlier tooling is reused (D5, D19, D12). |
 | **Blocked stories** | None. D6, D7, D20 and Q5 were decided by Matt on 2026-09-13; the affected stories now state the decision. |
@@ -29,6 +30,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 ## Epic 1. Platform foundation (Increment 1)
 
 ### US-01 Platform repository exists and is the source of truth
+**Status:** built
 **Story.** As Matt, I want one private GitHub repository named `development-platform` holding every reusable part of the platform, so that a new machine can pull one thing and regain the same development behaviour.
 
 **Acceptance.**
@@ -39,6 +41,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** sections 5, 16; D2, D9, D18; Q2.
 
 ### US-02 Configuration schemas exist before anything reads configuration
+**Status:** built
 **Story.** As Matt, I want JSON Schema definitions for every registry file and both project configuration files, so that the CLI and CI can reject a bad file with the field named instead of failing later in a confusing way.
 
 **Acceptance.**
@@ -49,6 +52,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** section 12; D23; Q1; A3.
 
 ### US-03 Project configuration is two files
+**Status:** built
 **Story.** As Matt, I want a project's configuration to be `project/profile.yaml` and `deploy/target.yml` and nothing else, so that I can read a project's whole identity in under a minute.
 
 **Acceptance.**
@@ -59,6 +63,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** sections 6, 12; D23, D7. Default branches in `target.yml` are `dev`, `cert`, `main`.
 
 ### US-04 Every project has a small CLAUDE.md that points at the platform
+**Status:** built
 **Story.** As Matt, I want each project's `CLAUDE.md` to be short and to tell Claude to work through the orchestrator, where the configuration is, and which rules apply, so that project instructions never drift into a copy of the platform.
 
 **Acceptance.**
@@ -69,6 +74,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** sections 6, 7; D3, D11, D16.
 
 ### US-05 Platform agents and skills are installed at user scope, not copied
+**Status:** built
 **Story.** As Matt, I want the CLI to install the platform's agents, skills and commands into `~/.claude/` from the platform working copy, so that every project sees the same versions and a platform update reaches all projects at once.
 
 **Acceptance.**
@@ -79,6 +85,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** section 19; D3; Q3.
 
 ### US-06 Platform version is visible and mismatches are reported
+**Status:** built
 **Story.** As Matt, I want each project to record the platform version it expects, and `dev open` to warn when the installed platform is behind or ahead, so that I know why behaviour changed.
 
 **Acceptance.**
@@ -93,6 +100,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 ## Epic 2. Creating a project (Increment 1)
 
 ### US-07 Create a Flask project with one command
+**Status:** built
 **Story.** As Matt, I want to type `dev new flask <target>` and answer a short questionnaire, so that I get a GitHub-backed, correctly configured project without assembling anything by hand.
 
 **Acceptance.**
@@ -103,6 +111,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** sections 13, 14, 21; A5; D6. The first valid `<target>` is `as2`.
 
 ### US-08 The questionnaire asks only what registries cannot answer
+**Status:** built
 **Story.** As Matt, I want the new-project questionnaire to be short and to skip anything the registries or the template already know, so that starting a project takes minutes, not an interview.
 
 **Acceptance.**
@@ -113,6 +122,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** section 14; D23.
 
 ### US-09 Prerequisites are checked before anything is created
+**Status:** built
 **Story.** As Matt, I want `dev new` to check Linux, Git, gh authentication and Claude Code before it does anything, so that a failure happens before a half-made repository exists.
 
 **Acceptance.**
@@ -123,6 +133,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** section 13.
 
 ### US-10 A Flask template is part of the platform
+**Status:** built
 **Story.** As Matt, I want a Flask web template inside the platform repository, written fresh, so that every Flask project starts from the same shape.
 
 **Acceptance.**
@@ -133,6 +144,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** section 6; D19.
 
 ### US-11 New projects get git identity and branches without manual git work
+**Status:** built
 **Story.** As Matt, I want `dev new` to create the working copy under the correct identity folder and create the configured branches, so that the first commit signs correctly and the promotion path exists from day one.
 
 **Acceptance.**
@@ -147,6 +159,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 ## Epic 3. Opening a project and starting a session (Increment 1)
 
 ### US-12 Open a project and see a readiness summary
+**Status:** built
 **Story.** As Matt, I want `dev open <project>` to launch Claude Code with the project's context loaded and to print a readiness summary, so that I never re-explain a project at the start of a session.
 
 **Acceptance.**
@@ -157,6 +170,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** section 13A; A2; D11.
 
 ### US-13 The CLI verifies; Claude loads
+**Status:** built
 **Story (System).** The CLI must verify that platform rules, agents, skills, the project `CLAUDE.md` and the docs folders exist and are valid, and pass their paths to Claude, but must not itself load any of them into the session.
 
 **Acceptance.**
@@ -167,6 +181,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** section 13A; D3, D11.
 
 ### US-14 Git state is part of readiness
+**Status:** built
 **Story.** As Matt, I want the readiness summary to tell me the branch, whether the working tree is clean, and whether the branch is one of the configured environment branches, so that I do not start work on the wrong branch.
 
 **Acceptance.**
@@ -177,6 +192,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** section 13A.
 
 ### US-15 `dev status` answers "where am I" without launching Claude
+**Status:** built
 **Story.** As Matt, I want `dev status` to print the current project, branch, git state, configured environments, declared data sources and platform version, so that I can check a project from a terminal in one command.
 
 **Acceptance.**
@@ -190,6 +206,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 ## Epic 4. Working through the orchestrator (Increment 1)
 
 ### US-16 One conversation, one orchestrator
+**Status:** built
 **Story.** As Matt, I want to describe work in plain language to one orchestrator and receive one consolidated result, so that I never choose or coordinate specialist agents myself.
 
 **Acceptance.**
@@ -200,6 +217,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** sections 7, 17; D1, D11; A6.
 
 ### US-17 Seven specialists exist and stay distinct
+**Status:** built
 **Story (System).** The platform provides exactly these specialist agents at user scope: Code/Flask, Database/SQL, Infrastructure, Deployment, Documentation, Test, Review. Database variants are skills of the Database/SQL Agent, not further agents.
 
 **Acceptance.**
@@ -210,6 +228,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1 (Code/Flask, Database/SQL, Documentation, Test, Review), 2 (Infrastructure, Deployment). **Traces to** section 7; D1, D12.
 
 ### US-18 The quick-change workflow stays light
+**Status:** built
 **Story.** As Matt, I want several small related changes to be handled as one task with proportionate testing and documentation, so that ordinary development is not slowed by process.
 
 **Acceptance.**
@@ -220,6 +239,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** sections 9, 17, 18; Q4.
 
 ### US-19 Schema is inspected, never guessed
+**Status:** built
 **Story.** As Matt, I want any question about a database schema to be answered from a live inspection through the platform's database workflow, so that I never act on a remembered or invented column.
 
 **Acceptance.**
@@ -230,6 +250,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** sections 9, 16; A4; D24.
 
 ### US-20 Documentation is kept in step with code
+**Status:** built
 **Story.** As Matt, I want the Documentation Agent to update user stories, requirements, decisions and change history when an implementation meaningfully changes them, so that a project explains not just what exists but why.
 
 **Acceptance.**
@@ -240,6 +261,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1. **Traces to** sections 18; D16.
 
 ### US-21 Skills grow from use, not up front
+**Status:** built
 **Story.** As Matt, I want a rule that a skill is written only after the same instruction has been given to Claude by hand twice, so that the skill library stays small and true.
 
 **Acceptance.**
@@ -253,6 +275,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 ## Epic 5. Deploying with gates (Increment 2)
 
 ### US-22 Registries describe the world without secrets
+**Status:** built
 **Story.** As Matt, I want registries for repositories, environments, containers, databases and tunnels, so that projects reference resources by logical name and nothing is rediscovered or hard-coded.
 
 **Acceptance.**
@@ -263,6 +286,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 2. **Traces to** section 11; D8, D13; Q5. The first application-environment entries are `qa-operations` and `in-analytics`, two separate containers on AWS; their databases are filled in by inspection in increment 2.
 
 ### US-23 Deploy to DEV and CERT with a streamlined workflow
+**Status:** built
 **Story.** As Matt, I want `/deploy-dev` and `/deploy-cert` to validate the target, check git state, run proportionate tests, deploy, health-check, inspect logs and report, so that routine promotion is one command.
 
 **Acceptance.**
@@ -273,6 +297,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 2. **Traces to** sections 9, 15, 16; D24; A7; D6. Target is AS2.
 
 ### US-24 Production deploy requires explicit approval enforced by a hook
+**Status:** built
 **Story.** As Matt, I want `/deploy-prod` to be stopped by a hook unless I have given explicit approval in the session that names repo, commit, branch, environment and target, so that no production deploy happens on an agent's judgement alone.
 
 **Acceptance.**
@@ -283,6 +308,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 2. **Traces to** section 16; D21, D24; A8.
 
 ### US-25 Production deploy verifies everything it can before acting
+**Status:** built
 **Story (System).** Before a production deploy, the Deployment Agent must verify repository and exact commit, branch and clean working tree, test and review evidence proportionate to risk, migration review, backup where data is at risk, and a rollback procedure.
 
 **Acceptance.**
@@ -293,6 +319,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 2. **Traces to** section 16.
 
 ### US-26 Rollback exists before it is needed
+**Status:** built
 **Story.** As Matt, I want a rollback script that returns an environment to its previous deployed commit, so that a bad deploy is undone in one command.
 
 **Acceptance.**
@@ -302,6 +329,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 2. **Traces to** sections 10, 16.
 
 ### US-27 Risk is classified by what is touched
+**Status:** built
 **Story (System).** The orchestrator must classify every request as low, medium or high risk by the operations and targets involved, using the tiers in the design's Q4, and escalate when unsure. High-risk gates are enforced by hooks so they hold even if classification is wrong.
 
 **Acceptance.**
@@ -312,6 +340,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 2. **Traces to** section 17; Q4; D21.
 
 ### US-28 Destructive database operations are refused
+**Status:** built
 **Story (System).** The Database/SQL Agent must refuse an unscoped DELETE or UPDATE, and any DROP or TRUNCATE outside an approved migration, on every database.
 
 **Acceptance.**
@@ -322,6 +351,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1 (refusal), 2 (migration path). **Traces to** section 16; A4.
 
 ### US-29 `dev list` shows every platform project and nothing else
+**Status:** built
 **Story.** As Matt, I want `dev list` to scan my two identity folders for projects with `profile.yaml`, so that the list is always derived from disk and can never drift.
 
 **Acceptance.**
@@ -331,6 +361,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 2. **Traces to** section 13; Q2; A10.
 
 ### US-30 Infrastructure is validated through scripts
+**Status:** built
 **Story.** As Matt, I want `dev health [env]` and the check scripts for Docker, tunnels and cloud identity to tell me whether the pieces a project depends on are reachable, so that a failed deploy is not the first sign of a broken tunnel.
 
 **Acceptance.**
@@ -344,6 +375,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 ## Epic 6. Adopting existing applications (Increment 3)
 
 ### US-31 Bring an existing repository under the platform
+**Status:** built
 **Story.** As Matt, I want `dev open` on a repository without `profile.yaml` to offer adopt mode, detect the stack, prefill the questionnaire and write the configuration on a branch, so that any application can join the platform without hand-editing files.
 
 **Acceptance.**
@@ -358,6 +390,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 ## Epic 7. Later
 
 ### US-32 Desktop templates
+**Status:** later
 **Story.** As Matt, I want Python and C++ desktop templates in the platform, so that desktop tools are created the same way as web services.
 
 **Acceptance.** Given `dev new desktop python` or `dev new desktop cpp`, then a project is created with `kind: desktop` in `target.yml`, `dev deploy` refuses it, and its tests pass.
@@ -365,6 +398,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** L. **Traces to** section 6; D20. Python desktop uses PyQt6.
 
 ### US-33 A second hosting target
+**Status:** later
 **Story.** As Matt, I want to add a second hosting target as a registry entry, so that a project can move hosts by changing configuration, not code.
 
 **Acceptance.** Given a second entry in the environments registry, when a project's `target.yml` names it, then `dev deploy` uses it with no change to the project's code.
@@ -376,6 +410,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 ## Cross-cutting stories
 
 ### US-34 No secrets in any repository
+**Status:** built
 **Story (System).** No credential, key or token may exist in the platform repository, any project repository, or any registry.
 
 **Acceptance.** Given CI on any of those repositories, then a secret scan passes (A9); given `.env` files, then they are git-ignored and only `.env.example` is committed.
@@ -383,6 +418,7 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 **Increment** 1 to 3. **Traces to** section 16; D9, D13.
 
 ### US-35 Out of scope is written down
+**Status:** built
 **Story (System).** The platform's first release targets one Linux laptop and one hosting target. MacBook, Azure and on-premises are recorded as non-goals.
 
 **Acceptance.** Given the platform `README.md`, then it states these non-goals; given the bootstrap script, then it checks for Linux and refuses elsewhere with a clear message.
@@ -393,12 +429,12 @@ Stories are grouped into epics. The epics follow the increments so that a finish
 
 ## Story map by increment
 
-| Increment | Stories |
-|---|---|
-| 1 Create | US-01 to US-14, US-16 to US-21, US-28 (refusal), US-34, US-35 |
-| 2 Deploy | US-15, US-17 (Infrastructure, Deployment), US-22 to US-30 |
-| 3 Adopt | US-31 |
-| Later | US-32, US-33 |
+| Increment | Stories | Status |
+|---|---|---|
+| 1 Create | US-01 to US-14, US-16 to US-21, US-28 (refusal), US-34, US-35 | built |
+| 2 Deploy | US-15, US-17 (Infrastructure, Deployment), US-22 to US-30 | built |
+| 3 Adopt | US-31 | built |
+| Later | US-32, US-33 | later |
 
 ## Decisions applied
 

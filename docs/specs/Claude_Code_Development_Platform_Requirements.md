@@ -2,7 +2,8 @@
 
 | | |
 |---|---|
-| **Status** | Draft for review. Derived from `Claude_Code_Development_Platform.md` and `Claude_Code_Development_Platform_User_Stories.md` (2026-09-13). |
+| **Status** | Built through increment 3 on 2026-09-13. Items marked "later" (increment L) remain open. Derived from `Claude_Code_Development_Platform.md` and `Claude_Code_Development_Platform_User_Stories.md` (2026-09-13). |
+| **Built** | v0.1.0 (increment 1), v0.2.0 (increment 2), v0.3.0 and v0.3.1 (increment 3). Verified with platform-console. |
 | **Date** | 2026-09-13 |
 | **Scope** | Fresh start. No earlier tooling is reused. |
 | **Language** | MUST = mandatory for the increment named. SHOULD = expected unless a recorded decision says otherwise. MAY = optional. |
@@ -224,6 +225,8 @@ This document states what the platform must do and how each requirement is verif
 
 Nothing in this document is blocked.
 
+Everything listed as increment 1, 2 or 3 is built and verified as of 2026-09-13 (v0.3.1, verified with platform-console); TPL-3 and TPL-4 (increment L) remain open.
+
 ---
 
 ## 7. Traceability
@@ -296,3 +299,4 @@ None. Every functional requirement appears in the table above; non-functional re
 |---|---|
 | 2026-09-13 | First draft from the consolidated design and the user stories. Fresh-start scope. |
 | 2026-09-13 | D6, D7, D20 and Q5 decided by Matt and applied: C5, CFG-7, REG-4, TPL-4, section 6. |
+| 2026-09-13 | Increments 1 to 3 built and verified; statuses updated. |

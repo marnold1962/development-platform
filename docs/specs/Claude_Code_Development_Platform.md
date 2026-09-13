@@ -2,7 +2,8 @@
 
 | | |
 |---|---|
-| **Status** | Concept, consolidated. Nothing built. D6, D7, D20 and Q5 DECIDED by Matt 2026-09-13; remaining PROPOSED items are the working assumption unless Matt objects. Nothing blocks increment 1. |
+| **Status** | Built through increment 3 on 2026-09-13. Items marked "later" (desktop templates, second hosting target) remain open. D6, D7, D20 and Q5 DECIDED by Matt 2026-09-13; remaining PROPOSED items are the working assumption unless Matt objects. |
+| **Built** | v0.1.0 (increment 1, create), v0.2.0 (increment 2, deploy), v0.3.0 and v0.3.1 (increment 3, adopt). Verified with platform-console. |
 | **Date** | 2026-09-13 |
 | **Supersedes** | `Master_Plan.docx`, `Project_Context.docx`, `Top_Level_Hierarchy.docx`, `What_We_Are_Creating.docx` (all in this folder, 2026-09-12/13) |
 | **Next step** | Confirm the decisions in section 22 and the answers in section 23, then write user stories and requirements from this document. |
@@ -29,7 +30,7 @@
 | D22 | Build in three increments (Create, Deploy, Adopt), each usable on a real project, instead of seven phases. |
 | Q5 | **Decided.** "QA" is the QA Operations environment and "Analytics" is the IN Analytics environment: two separate containers on AWS. Registry entries `qa-operations` and `in-analytics`; their databases are named when the registry is written. |
 
-**What happens next.** Confirm or change sections 22 and 23. Then user stories and requirements are written from sections 13 to 17, 20 and 21.
+**What happened.** Increments 1 to 3 are built (v0.3.1) and verified with a real application, platform-console, deployed to production on AS2 on 2026-09-13. Open: desktop templates, a second hosting target, and the database registry entries, which are added by inspection when a project first declares a data source.
 
 ---
 

@@ -1,5 +1,8 @@
 # Change history
 
+## 2026-09-13 — Specs marked built through increment 3
+Header status and a Built row (v0.1.0, v0.2.0, v0.3.0, v0.3.1, verified with platform-console) in all three specs; per-story status lines and a Status column in the story map; requirements section 6 and change history note increments 1 to 3 built, TPL-3 and TPL-4 open; design Summary "What happened" paragraph. US-32 and US-33 remain "later".
+
 ## 2026-09-13 — Increment 3: adopt
 `dev open <path> --adopt`: detects the stack from files present, prefills the questionnaire, writes configuration on branch `platform/adopt`, then the readiness summary works. Declining writes nothing. Affects US-31, ADP-1..3, CLI-9, A11.
 
@@ -8,3 +11,6 @@
 
 ## 2026-09-13 — Increment 1: create
 Platform repo, schemas, rules, five agents, five skills, six commands, Flask template, questionnaire, `dev new`, `dev open`, `dev platform update`. Tag v0.1.0.
+
+## 2026-09-13 — Fixes from first real use
+Template `CLAUDE.md` no longer says deployment is unavailable. `dev health` with no environment reports an undeployed environment as "not deployed" instead of unhealthy; asking for that environment explicitly still fails. Approval prompt accepts a full commit hash. Gate hook honours a leading `cd <dir>`.

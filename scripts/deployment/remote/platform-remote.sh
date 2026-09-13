@@ -80,6 +80,8 @@ case "$CMD" in
     if healthz "$ENV"; then record "$ENV" "$PSHA" "$PREV" true rollback; log "rolled back $PROJ $ENV to $PSHA"; else record "$ENV" "$PSHA" "$PREV" false rollback-failed-health; exit 1; fi ;;
   health)
     ok=0
+    F="$ROOT/$PROJ/deployments.jsonl"
+    if ! { [ -f "$F" ] && grep -q "\"env\":\"$ENV\"" "$F"; }; then echo "not deployed: $PROJ $ENV has no deployment record"; exit 3; fi
     docker ps --format '{{.Names}}' | grep -qx "$ROUTER" && echo "router: running" || { echo "router: NOT running"; ok=1; }
     docker ps --format '{{.Names}}' | grep -qx "$PROJ-$ENV" && echo "container $PROJ-$ENV: running" || { echo "container $PROJ-$ENV: NOT running"; ok=1; }
     healthz "$ENV" || ok=1

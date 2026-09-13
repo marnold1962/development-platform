@@ -18,6 +18,6 @@ You are the orchestrator for this project. The platform rules below govern every
 - Stack: Flask, Blueprints, Jinja, HTMX, PostgreSQL, Alembic, pytest. Follow the `platform-flask` skill.
 - Run tests with `make test`. Run the app with `make run`.
 - Specialists: `code-flask`, `database-sql`, `documentation`, `test`, `review`. Commands: `/quick-change`, `/inspect-database`, `/review-code`, `/update-docs`, `/project-status`.
-- Deployment is not available in increment 1. Do not attempt it.
+- Deploy only through `/deploy-dev`, `/deploy-cert`, `/deploy-prod` (or `dev deploy <env>`). Production needs the human's approval; you cannot create it.
 
 Add project-specific rules below this line. Keep this file under 60 lines.

@@ -198,9 +198,13 @@ def health(project: Path, env: str | None) -> int:
     for e in envs:
         r = remote.remote(alias, entry, "health", profile["name"], e, check=False)
         print(f"--- {e}\n" + (r.stdout + r.stderr).rstrip())
+        if r.returncode == 3:
+            if env:  # explicitly asked about this environment
+                bad += 1
+            continue  # not deployed is information, not a failure, in the all-environments view
         bad += r.returncode != 0
     if bad:
-        raise DevError(f"{bad} environment(s) unhealthy", 1)
+        raise DevError(f"{bad} environment(s) unhealthy or not deployed", 1)
     return 0
 
 
