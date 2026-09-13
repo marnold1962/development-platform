@@ -22,3 +22,8 @@ def test_index_htmx_fragment(client):
 
 def test_greeting_is_pure():
     assert greeting("x") == "x is running."
+
+
+def test_forwarded_prefix_sets_script_name(client):
+    r = client.get("/platform/dev/demo/healthz", headers={"X-Forwarded-Prefix": "/platform/dev/demo"})
+    assert r.status_code == 200

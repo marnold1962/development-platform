@@ -6,9 +6,9 @@ from devcli import gitops
 from devcli.config import load_registry
 from devcli.paths import CLAUDE_HOME, PLATFORM_ROOT, platform_version
 
-REQUIRED_AGENTS = ["code-flask", "database-sql", "documentation", "test", "review"]
-REQUIRED_SKILLS = ["platform-flask", "platform-postgresql", "platform-git", "platform-pytest", "platform-documentation"]
-REQUIRED_COMMANDS = ["project-setup", "quick-change", "inspect-database", "review-code", "update-docs", "project-status"]
+REQUIRED_AGENTS = ["code-flask", "database-sql", "documentation", "test", "review", "infrastructure", "deployment"]
+REQUIRED_SKILLS = ["platform-flask", "platform-postgresql", "platform-git", "platform-pytest", "platform-documentation", "platform-deployment", "platform-docker", "platform-ssh"]
+REQUIRED_COMMANDS = ["project-setup", "quick-change", "inspect-database", "review-code", "update-docs", "project-status", "deploy-dev", "deploy-cert", "deploy-prod", "project-reconfigure"]
 
 
 def verify_platform_installed() -> list[str]:

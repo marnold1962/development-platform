@@ -1,19 +1,42 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "registries/tunnels.yaml",
-  "type": "object", "additionalProperties": false,
-  "required": ["tunnels"],
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "tunnels"
+  ],
   "properties": {
     "tunnels": {
       "type": "object",
       "additionalProperties": {
-        "type": "object", "additionalProperties": false,
-        "required": ["kind", "to"],
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "to"
+        ],
         "properties": {
-          "kind": {"type": "string", "enum": ["ssh", "cloudflare"]},
-          "to": {"type": "string"},
-          "command": {"type": "string", "description": "Command to open it; no secrets"},
-          "forwards": {"type": "array", "items": {"type": "string"}}
+          "kind": {
+            "type": "string",
+            "enum": [
+              "ssh",
+              "cloudflare"
+            ]
+          },
+          "to": {
+            "type": "string"
+          },
+          "command": {
+            "type": "string",
+            "description": "Command to open it; no secrets"
+          },
+          "forwards": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       }
     }

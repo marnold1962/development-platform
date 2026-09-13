@@ -1,5 +1,11 @@
-# Server and container mappings. Filled in increment 2 by inspection.
-# Q5 (Matt, 2026-09-13): two main development environments on AWS run as
-# separate containers: QA Operations and IN Analytics. Their hosts and
-# container names are recorded here when inspected, not from memory.
-containers: {}
+# Server and container mappings. Recorded by inspection (docker ps), not from memory.
+# Q5 (Matt, 2026-09-13): "QA" = QA Operations, "Analytics" = IN Analytics; separate containers on AWS.
+# Inspected 2026-09-13 on host aws-ec2 (ip-172-26-8-132).
+containers:
+  in-analytics-dev:  { host: aws-ec2, environment: dev,  application: IN Analytics,  note: "container flask-dev, image ai-analytics-flask-dev" }
+  in-analytics-cert: { host: aws-ec2, environment: cert, application: IN Analytics,  note: "container flask-cert, image ai-analytics-flask-cert" }
+  in-analytics-prod: { host: aws-ec2, environment: prod, application: IN Analytics,  note: "container flask-prod, image ai-analytics-flask-prod" }
+  qa-operations-dev:  { host: aws-ec2, environment: dev,  application: QA Operations, note: "container flask-qa-dev, image qa-operations-flask-qa-dev" }
+  qa-operations-cert: { host: aws-ec2, environment: cert, application: QA Operations, note: "container flask-qa-cert, image qa-operations-flask-qa-cert" }
+  qa-operations-prod: { host: aws-ec2, environment: prod, application: QA Operations, note: "container flask-qa-prod, image qa-operations-flask-qa-prod" }
+  platform-router:    { host: as2, environment: prod, application: platform, note: "nginx, 127.0.0.1:8200, network platform-net; routes /platform/<env>/<project>/ to <project>-<env>:5000" }

@@ -30,8 +30,22 @@ def build_parser() -> argparse.ArgumentParser:
     u = pls.add_parser("update", help="pull the platform and install agents, skills and commands to ~/.claude")
     u.add_argument("--no-pull", action="store_true", help="install from the working copy without git pull")
 
-    for name in ("list", "status", "deploy", "health", "rollback", "db"):
-        sub.add_parser(name, help="increment 2")
+    sub.add_parser("list", help="platform projects under the identity folders")
+    st = sub.add_parser("status", help="readiness summary plus last deployment per environment")
+    st.add_argument("--offline", action="store_true", help="do not contact the host")
+    d = sub.add_parser("deploy", help="dev deploy <env>: preflight, tests, push to host, build, run, health-check")
+    d.add_argument("env", choices=["dev", "cert", "prod"])
+    ap = sub.add_parser("approve", help="human only: approve the current HEAD for prod (dev approve prod)")
+    ap.add_argument("env", choices=["prod"])
+    ap.add_argument("--verify", action="store_true", help="check that a valid approval exists for HEAD; exit 4 if not")
+    h = sub.add_parser("health", help="dev health [env]: router, container and healthz on the host")
+    h.add_argument("env", nargs="?", choices=["dev", "cert", "prod"])
+    rb = sub.add_parser("rollback", help="dev rollback <env>: re-run the previous successful deployment")
+    rb.add_argument("env", choices=["dev", "cert", "prod"])
+    db = sub.add_parser("db", help="database operations")
+    dbs = db.add_subparsers(dest="dbcmd", required=True)
+    di = dbs.add_parser("inspect", help="dev db inspect <name>: validate and inspect a declared data source")
+    di.add_argument("name", nargs="?", default="app")
     return p
 
 
@@ -50,7 +64,24 @@ def main(argv: list[str] | None = None) -> int:
             return commands.open_(args.project, args.check)
         if args.cmd == "platform" and args.pcmd == "update":
             return commands.platform_update(pull=not args.no_pull)
-        raise DevError(f"'dev {args.cmd}' arrives in increment 2", 2)
+        from devcli import deploy as dp
+        from devcli.commands import _find_project
+        if args.cmd == "list":
+            return dp.list_projects()
+        here = _find_project(".")
+        if args.cmd == "status":
+            return dp.status(here, args.offline)
+        if args.cmd == "deploy":
+            return dp.deploy(here, args.env)
+        if args.cmd == "approve":
+            return dp.approve(here, args.env, args.verify)
+        if args.cmd == "health":
+            return dp.health(here, args.env)
+        if args.cmd == "rollback":
+            return dp.rollback(here, args.env)
+        if args.cmd == "db" and args.dbcmd == "inspect":
+            return dp.db_inspect(here, args.name)
+        raise DevError(f"unknown command {args.cmd}", 2)
     except DevError as e:
         sys.stdout.flush()
         print(f"error: {e}", file=sys.stderr, flush=True)

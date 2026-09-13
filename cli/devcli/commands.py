@@ -94,6 +94,12 @@ def open_(name_or_path: str, check_only: bool) -> int:
 
 def _find_project(name_or_path: str) -> Path:
     p = Path(name_or_path).expanduser()
+    if name_or_path == ".":
+        cur = Path.cwd().resolve()
+        for cand in (cur, *cur.parents):
+            if (cand / "project" / "profile.yaml").exists():
+                return cand
+        raise DevError("not inside a platform project (no project/profile.yaml in this folder or its parents)", 2)
     if p.is_dir():
         return p.resolve()
     for root in IDENTITY_ROOTS.values():
@@ -142,9 +148,32 @@ def platform_update(pull: bool) -> int:
             dst.mkdir(exist_ok=True)
             shutil.copy2(d / "SKILL.md", dst / "SKILL.md")
             installed.append(str(dst / "SKILL.md"))
+    hook_dst = CLAUDE_HOME / "hooks" / "platform-gate.sh"
+    hook_dst.parent.mkdir(exist_ok=True)
+    shutil.copy2(PLATFORM_ROOT / "hooks" / "platform-gate.sh", hook_dst)
+    hook_dst.chmod(0o755)
+    installed.append(str(hook_dst))
+    _register_hook(hook_dst)
     MANIFEST.write_text("\n".join(installed) + "\n")
     print(f"platform {platform_version()} installed: {len(installed)} files at ~/.claude (manifest: {MANIFEST})")
     return 0
+
+
+def _register_hook(hook_path: Path) -> None:
+    """Add the gate as a PreToolUse hook on Bash in ~/.claude/settings.json, once, without touching other hooks."""
+    import json
+    settings = CLAUDE_HOME / "settings.json"
+    data = json.loads(settings.read_text()) if settings.exists() else {}
+    hooks = data.setdefault("hooks", {})
+    pre = hooks.setdefault("PreToolUse", [])
+    command = f"bash '{hook_path}'"
+    for entry in pre:
+        for h in entry.get("hooks", []):
+            if h.get("command") == command:
+                return
+    pre.append({"matcher": "Bash", "hooks": [{"type": "command", "command": command, "timeout": 20}]})
+    settings.write_text(json.dumps(data, indent=2) + "\n")
+    print("registered PreToolUse gate hook in ~/.claude/settings.json")
 
 
 _prev_cache: list[str] | None = None

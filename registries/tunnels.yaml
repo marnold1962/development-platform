@@ -1,2 +1,7 @@
-# Non-secret tunnel topology. Filled in increment 2.
-tunnels: {}
+# Non-secret tunnel topology. Commands only; keys and tokens live in ~/.ssh.
+tunnels:
+  as2-platform-router:
+    kind: ssh
+    to: as2
+    command: ssh -N -L 8200:127.0.0.1:8200 as2-cf
+    forwards: ["8200 -> platform router on AS2; apps at http://127.0.0.1:8200/platform/<env>/<project>/"]

@@ -1,3 +1,4 @@
-# Database registry. Filled in increment 2 by inspection (REG-4, REG-5).
-# "QA" and "Analytics" appear only as labels on entries named by what they are.
+# Database registry. Entries are added only from inspection (REG-4, REG-5).
+# The IN Analytics and QA Operations databases have not been inspected yet; they are
+# added when a project declares them and `dev db inspect` has run against them.
 databases: {}

@@ -16,3 +16,21 @@ The CLI cannot inject context into Claude Code. It writes the readiness summary 
 
 ## 2026-09-13 — Platform's own deploy root on AS2 is `/srv/platform`, router prefix `/platform/`
 Chosen so the platform never writes into paths owned by earlier tooling (section 19, DEP-10). Deployment itself is increment 2.
+
+## 2026-09-13 — AS2 deploy root is `/home/matt/platform`, not `/srv/platform`
+No passwordless sudo on AS2, verified by inspection. Everything the platform puts on the host lives under the user's home. Registry updated.
+
+## 2026-09-13 — The platform runs its own router on AS2
+`platform-router` (nginx:alpine) on `127.0.0.1:8200`, network `platform-net`, routing `/platform/<env>/<project>/` to `<project>-<env>:5000` by Docker DNS at request time. Own container, own network, own port: nothing owned by earlier tooling is edited (section 19, DEP-10).
+
+## 2026-09-13 — Deploy pushes to the host over ssh, not via GitHub
+`dev deploy` pushes the branch head to a bare repo under the deploy root and runs the host-side script. No dependency on GitHub being reachable from the host, and no GitHub token on the host.
+
+## 2026-09-13 — Deployment history lives on the host, mirrored locally
+Authoritative: `<deploy_root>/<project>/deployments.jsonl` on the host (survives laptop changes). Mirror: `.platform/deployments.jsonl`, git-ignored, so a deploy never dirties the tree. `dev status` shows the host's view.
+
+## 2026-09-13 — Prod approval is a file typed by the human, consumed by one deploy
+`dev approve prod` prompts for the commit prefix, backup statement, rollback plan and migration review, writes `.platform/approval-prod.json` bound to HEAD, and `dev deploy prod` deletes it after use. A PreToolUse hook denies `dev approve` to Claude and denies `dev deploy prod` without a valid approval (D21, DEP-5, DEP-6).
+
+## 2026-09-13 — The AWS EC2 is registered as a host but is not a deploy target
+Inspected 2026-09-13: IN Analytics runs as `flask-dev/cert/prod`, QA Operations as `flask-qa-dev/cert/prod`, on one EC2. Recorded in `containers.yaml`. Databases not yet inspected; `databases.yaml` stays empty until they are (REG-5).

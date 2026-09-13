@@ -2,12 +2,23 @@
 # D6 (Matt, 2026-09-13): the first hosting target is AS2.
 hosts:
   as2:
-    description: Home server. First hosting target (D6).
+    description: Home server. First hosting target (D6). No passwordless sudo, so the platform lives under the user's home.
     reach:
-      - ssh: home
-        note: LAN
       - ssh: as2-cf
-        note: Cloudflare tunnel
-    deploy_root: /srv/platform
+        note: Cloudflare tunnel; works from anywhere
+      - ssh: home
+        note: LAN only
+    ssh_user: matt
+    deploy_root: /home/matt/platform
     router_prefix: /platform/
+    router_port: 8200
     environments: [dev, cert, prod]
+  aws-ec2:
+    description: AWS EC2 (ip-172-26-8-132) running the IN Analytics and QA Operations containers. Not a platform deploy target yet (Q8); registered so containers.yaml can name it.
+    reach:
+      - ssh: ec2-inanalytics
+        note: Cloudflare Access ssh
+    ssh_user: ubuntu
+    deploy_root: /home/ubuntu/platform
+    router_prefix: /platform/
+    environments: []

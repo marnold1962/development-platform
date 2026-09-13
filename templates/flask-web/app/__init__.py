@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 
 from app.models import db
+from app.wsgi_prefix import ForwardedPrefix
 
 
 def create_app(config_name: str = "default") -> Flask:
@@ -18,4 +19,5 @@ def create_app(config_name: str = "default") -> Flask:
     def healthz():
         return jsonify(status="ok")
 
+    app.wsgi_app = ForwardedPrefix(app.wsgi_app)
     return app
