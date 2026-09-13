@@ -34,3 +34,6 @@ Authoritative: `<deploy_root>/<project>/deployments.jsonl` on the host (survives
 
 ## 2026-09-13 — The AWS EC2 is registered as a host but is not a deploy target
 Inspected 2026-09-13: IN Analytics runs as `flask-dev/cert/prod`, QA Operations as `flask-qa-dev/cert/prod`, on one EC2. Recorded in `containers.yaml`. Databases not yet inspected; `databases.yaml` stays empty until they are (REG-5).
+
+## 2026-09-13 — Adoption lands on branch `platform/adopt`, never on the current branch
+`dev open --adopt` creates the branch from HEAD, writes `project/profile.yaml`, `deploy/target.yml`, docs stubs and `.gitignore` lines, and commits there. A dirty tree or a repository outside an identity folder is refused. An existing `CLAUDE.md` is kept; the platform import and facts block is prepended so nothing the project already said is lost. Reversible by deleting the branch (NFR-9).

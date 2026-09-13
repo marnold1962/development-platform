@@ -1,5 +1,8 @@
 # Change history
 
+## 2026-09-13 — Increment 3: adopt
+`dev open <path> --adopt`: detects the stack from files present, prefills the questionnaire, writes configuration on branch `platform/adopt`, then the readiness summary works. Declining writes nothing. Affects US-31, ADP-1..3, CLI-9, A11.
+
 ## 2026-09-13 — Increment 2: deploy
 `dev deploy`, `dev approve`, `dev rollback`, `dev health`, `dev status`, `dev list`, `dev db inspect`. Infrastructure and Deployment agents. Skills platform-deployment, platform-docker, platform-ssh. Commands /deploy-dev, /deploy-cert, /deploy-prod, /project-reconfigure. Risk gate hook. Router and remote script. Registries filled from inspection (containers, aws-ec2 host, tunnels). Template gains Dockerfile and forwarded-prefix middleware. Affects US-15, US-17, US-22 to US-30; DEP-*, SAF-5, CLI-10, CLI-11, CLI-13.
 

@@ -83,8 +83,18 @@ def _open_impl(project: Path, launch: bool) -> list[str]:
     return out
 
 
-def open_(name_or_path: str, check_only: bool) -> int:
+def open_(name_or_path: str, check_only: bool, adopt_flag: bool = False, adopt_answers: dict | None = None,
+          interactive: bool = True, host: str = "as2") -> int:
     project = _find_project(name_or_path)
+    if not (project / "project" / "profile.yaml").exists():
+        from devcli import adopt as ad
+        if not adopt_flag:
+            if not interactive:
+                raise DevError(f"{project} has no project/profile.yaml; pass --adopt to bring it under the platform", 2)
+            ans = input(f"{project} is not a platform project. Adopt it (write profile.yaml, target.yml, CLAUDE.md on a new branch)? [y/N]: ").strip().lower()
+            if ans != "y":
+                raise DevError("not adopted; nothing written", 2)
+        ad.adopt(project, adopt_answers, interactive, host)
     for line in _open_impl(project, launch=False):
         print(line)
     if not check_only:

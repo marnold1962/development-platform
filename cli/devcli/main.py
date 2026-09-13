@@ -24,6 +24,12 @@ def build_parser() -> argparse.ArgumentParser:
     o = sub.add_parser("open", help="open a project: dev open <name|path>")
     o.add_argument("project")
     o.add_argument("--check", action="store_true", help="verify and print the readiness summary; do not launch")
+    o.add_argument("--adopt", action="store_true", help="adopt a repository the platform did not create (increment 3)")
+    o.add_argument("--name"); o.add_argument("--purpose")
+    o.add_argument("--kind", choices=["service", "desktop"])
+    o.add_argument("--host", default="as2", help="hosting target for an adopted service")
+    o.add_argument("--branches", help="comma list for dev,cert,prod")
+    o.add_argument("--non-interactive", action="store_true")
 
     pl = sub.add_parser("platform", help="platform maintenance")
     pls = pl.add_subparsers(dest="pcmd", required=True)
@@ -61,7 +67,12 @@ def main(argv: list[str] | None = None) -> int:
             answers["identity"] = args.identity
             return commands.new(args.type, args.target, answers, not args.non_interactive, not args.local, not args.no_launch)
         if args.cmd == "open":
-            return commands.open_(args.project, args.check)
+            aa = {}
+            if args.name: aa["name"] = args.name
+            if args.purpose: aa["purpose"] = args.purpose
+            if args.kind: aa["kind"] = args.kind
+            if args.branches: aa["branches"] = [b.strip() for b in args.branches.split(",")]
+            return commands.open_(args.project, args.check, args.adopt, aa, not args.non_interactive, args.host)
         if args.cmd == "platform" and args.pcmd == "update":
             return commands.platform_update(pull=not args.no_pull)
         from devcli import deploy as dp

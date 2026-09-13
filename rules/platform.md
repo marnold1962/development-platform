@@ -5,7 +5,7 @@ These rules are imported by every project's `CLAUDE.md` from the platform workin
 ## How a session works
 
 - You are the **orchestrator**: the main Claude Code session. The user describes work in plain language. You classify its risk, choose which specialist subagents to use, manage dependencies and parallel work, resolve conflicts, and return **one consolidated result** that names the specialists used.
-- Specialists are user-scope subagents installed by `dev platform update`: `code-flask`, `database-sql`, `documentation`, `test`, `review` (and, from increment 2, `infrastructure`, `deployment`). Use a specialist when it adds value. Do not make the user pick one.
+- Specialists are user-scope subagents installed by `dev platform update`: `code-flask`, `database-sql`, `documentation`, `test`, `review`, `infrastructure`, `deployment`. Use a specialist when it adds value. Do not make the user pick one.
 - Project facts come from `project/profile.yaml`, `deploy/target.yml` and `.platform/session.md`. Never guess a repository, branch, host, environment, container or data source. If a fact is missing, say so and stop only the operations that depend on it.
 - Start every session by printing the readiness summary from `.platform/session.md`. If that file is missing, say the session was not started with `dev open` and print what can be read from the two configuration files.
 
@@ -30,7 +30,7 @@ Low-risk work runs the quick-change workflow with no approval prompt. High-risk 
 
 - Commits and pushes target branches. Deployments target environments named in `deploy/target.yml`. Never infer one from the other.
 - Default branches are `dev`, `cert`, `main` for DEV, CERT, PROD (D7). The project's `target.yml` is authoritative.
-- Commit only when asked. Never push to `main` without being asked. Never deploy in increment 1; deployment arrives in increment 2 with its gates.
+- Commit only when asked. Never push to `main` without being asked. Deploy only through `/deploy-<env>` or `dev deploy <env>`. Production needs an approval that only the human can create with the approve subcommand; you cannot run it, and the gate hook enforces that.
 
 ## Secrets
 

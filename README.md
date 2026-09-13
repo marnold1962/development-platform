@@ -21,9 +21,13 @@ dev new flask as2        # questionnaire, GitHub repo, working copy, branches, C
 dev open <project>       # verify, print the readiness summary, launch Claude Code
 dev open <project> --check   # verify and print only
 dev platform update      # pull and reinstall
+dev deploy <env>         # push HEAD to the host, build, run, health-check (dev, cert, prod)
+dev approve prod         # human only; bound to HEAD; consumed by one deploy
+dev health [env] / dev rollback <env> / dev status / dev list / dev db inspect <name>
+dev open <path> --adopt  # bring a repository the platform did not create under it, on branch platform/adopt
 ```
 
-Increment 2 adds `dev deploy`, `dev health`, `dev rollback`, `dev status`, `dev list`, `dev db inspect`. Increment 3 adds adopt mode for repositories the platform did not create.
+Increments 1 (create), 2 (deploy) and 3 (adopt) are built. Later: desktop templates, a second hosting target.
 
 ## Non-goals (first release)
 
