@@ -25,6 +25,7 @@ dev deploy <env>         # push HEAD to the host, build, run, health-check (dev,
 dev approve prod         # human only; bound to HEAD; consumed by one deploy
 dev health [env] / dev rollback <env> / dev status / dev list / dev db inspect <name>
 dev open <path> --adopt  # bring a repository the platform did not create under it, on branch platform/adopt
+dev host inventory as2   # read-only report of everything on the host, opens in the browser
 ```
 
 Increments 1 (create), 2 (deploy) and 3 (adopt) are built. Later: desktop templates, a second hosting target.

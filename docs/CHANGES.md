@@ -1,5 +1,9 @@
 # Change history
 
+## 2026-09-13 — Host inventory: dev host inventory <host>
+`dev host inventory <host>` pipes a read-only collector (`scripts/inventory/collect.py`) over ssh, nothing installed on the host; it inspects docker, env files, listening ports, systemd, cron, Ollama, GPU, disks and the file roots, which come from the registry (`deploy_root` plus `inventory_roots`).
+Secrets are masked at the source: container environment, env files and cron KEY=value assignments report only the name and value length; cron command lines are verbatim. The laptop writes JSON and an HTML report with a diff against the previous run.
+
 ## 2026-09-13 — Specs marked built through increment 3
 Header status and a Built row (v0.1.0, v0.2.0, v0.3.0, v0.3.1, verified with platform-console) in all three specs; per-story status lines and a Status column in the story map; requirements section 6 and change history note increments 1 to 3 built, TPL-3 and TPL-4 open; design Summary "What happened" paragraph. US-32 and US-33 remain "later".
 

@@ -40,3 +40,6 @@ Inspected 2026-09-13: IN Analytics runs as `flask-dev/cert/prod`, QA Operations 
 
 ## 2026-09-13 — `mounts` in target.yml, host paths only under deploy_root
 First real project (platform-console) needs to read `deployments.jsonl` on the host. `deploy/target.yml` may declare `mounts: [{host, container, readonly}]`; the CLI refuses any host path outside the host's `deploy_root` so a project can never mount the docker socket or another tool's files (DEP-10). Default read-only.
+
+## 2026-09-13 — Host inventory is a laptop-side report, not a service on the host
+Matt's first real need: "what is on AS2: containers, files, env, cron, LLM, everything". Built as `dev host inventory <host>`: a collector piped over ssh, JSON kept under `~/Work/inventory/<host>/`, HTML rendered locally with a diff against the previous run. Nothing installed on the host, so it cannot drift or need deploying. Environment values are never collected, only names and lengths, so the report can be shared without leaking a secret. A live page on the host is a later shape if the report proves useful.

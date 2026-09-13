@@ -2,6 +2,9 @@
 # D6 (Matt, 2026-09-13): the first hosting target is AS2.
 hosts:
   as2:
+    # verified 2026-09-13 by scripts/inventory/collect.py over as2-cf: hostname "matt",
+    # Ubuntu 24.04.4 LTS, kernel 6.8.0-124-generic, 32 CPUs, 62 GB RAM; platform-router
+    # (nginx:alpine) on 127.0.0.1:8200 in platform-net; nvidia-smi cannot reach the driver.
     description: Home server. First hosting target (D6). No passwordless sudo, so the platform lives under the user's home.
     reach:
       - ssh: as2-cf
@@ -10,6 +13,7 @@ hosts:
         note: LAN only
     ssh_user: matt
     deploy_root: /home/matt/platform
+    inventory_roots: [/home/matt, /mnt/data/apps, /mnt/data/dr]
     router_prefix: /platform/
     router_port: 8200
     environments: [dev, cert, prod]
@@ -20,5 +24,6 @@ hosts:
         note: Cloudflare Access ssh
     ssh_user: ubuntu
     deploy_root: /home/ubuntu/platform
+    inventory_roots: [/home/ubuntu]
     router_prefix: /platform/
     environments: []

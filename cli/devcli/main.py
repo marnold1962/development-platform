@@ -52,6 +52,12 @@ def build_parser() -> argparse.ArgumentParser:
     dbs = db.add_subparsers(dest="dbcmd", required=True)
     di = dbs.add_parser("inspect", help="dev db inspect <name>: validate and inspect a declared data source")
     di.add_argument("name", nargs="?", default="app")
+    ho = sub.add_parser("host", help="host operations")
+    hos = ho.add_subparsers(dest="hcmd", required=True)
+    hi = hos.add_parser("inventory", help="dev host inventory <host>: read-only report of everything on the host, rendered to HTML")
+    hi.add_argument("host", help="host from registries/environments.yaml, e.g. as2")
+    hi.add_argument("--out", help="output directory (default ~/Work/inventory/<host>)")
+    hi.add_argument("--no-open", action="store_true", help="do not open the report in the browser")
     return p
 
 
@@ -75,6 +81,11 @@ def main(argv: list[str] | None = None) -> int:
             return commands.open_(args.project, args.check, args.adopt, aa, not args.non_interactive, args.host)
         if args.cmd == "platform" and args.pcmd == "update":
             return commands.platform_update(pull=not args.no_pull)
+        if args.cmd == "host" and args.hcmd == "inventory":
+            from pathlib import Path
+            from devcli import inventory
+            inventory.run(args.host, Path(args.out) if args.out else None, not args.no_open)
+            return 0
         from devcli import deploy as dp
         from devcli.commands import _find_project
         if args.cmd == "list":

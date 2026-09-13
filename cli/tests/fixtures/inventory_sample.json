@@ -1,0 +1,184 @@
+{
+  "schema": 1,
+  "collected_at": "2026-09-13T10:15:00+00:00",
+  "host": {
+    "hostname": "as2",
+    "kernel": "6.8.0-124-generic",
+    "os": "Ubuntu 24.04.2 LTS",
+    "uptime": "up 12 days, 4 hours, 31 minutes",
+    "load": [0.42, 0.38, 0.35],
+    "cpu_count": 16,
+    "mem": {"total_mb": 64213, "used_mb": 18744, "available_mb": 44120},
+    "users_logged_in": ["matt"]
+  },
+  "disks": [
+    {"filesystem": "/dev/nvme0n1p2", "mount": "/", "size": "915G", "used": "212G", "avail": "657G", "pct": "25%"},
+    {"filesystem": "/dev/sda1", "mount": "/mnt/data", "size": "3.6T", "used": "2.1T", "avail": "1.4T", "pct": "61%"}
+  ],
+  "gpu": {
+    "available": false,
+    "error": "NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver.",
+    "devices": []
+  },
+  "docker": {
+    "version": "27.3.1",
+    "containers": [
+      {
+        "name": "exenta-reports-web",
+        "image": "exenta-reports:dev",
+        "state": "running",
+        "status": "Up 3 days",
+        "created": "2026-09-10T08:02:11Z",
+        "restart_count": 0,
+        "ports": ["127.0.0.1:8101->8000/tcp"],
+        "networks": ["exenta-reports_default"],
+        "mounts": [
+          {"source": "/srv/deploy/exenta-reports/dev/data", "destination": "/app/data", "mode": "rw"}
+        ],
+        "compose_project": "exenta-reports",
+        "compose_file": "/srv/deploy/exenta-reports/dev/docker-compose.yml",
+        "env": [
+          {"name": "DATABASE_URL", "len": 61},
+          {"name": "SECRET_KEY", "len": 44},
+          {"name": "FLASK_ENV", "len": 11}
+        ]
+      },
+      {
+        "name": "ha-bridge",
+        "image": "ghcr.io/home-assistant/home-assistant:2026.8",
+        "state": "running",
+        "status": "Up 5 hours",
+        "created": "2026-08-30T19:44:02Z",
+        "restart_count": 3,
+        "ports": ["0.0.0.0:8123->8123/tcp"],
+        "networks": ["bridge"],
+        "mounts": [
+          {"source": "/opt/ha/config", "destination": "/config", "mode": "rw"},
+          {"source": "/etc/localtime", "destination": "/etc/localtime", "mode": "ro"}
+        ],
+        "compose_project": null,
+        "compose_file": null,
+        "env": [
+          {"name": "TZ", "len": 13},
+          {"name": "HA_TOKEN", "len": 183}
+        ]
+      },
+      {
+        "name": "old-postgres",
+        "image": "postgres:15",
+        "state": "exited",
+        "status": "Exited (0) 6 weeks ago",
+        "created": "2026-06-01T12:00:00Z",
+        "restart_count": 0,
+        "ports": [],
+        "networks": ["bridge"],
+        "mounts": [
+          {"source": "pgdata", "destination": "/var/lib/postgresql/data", "mode": "rw"}
+        ],
+        "compose_project": null,
+        "compose_file": null,
+        "env": [
+          {"name": "POSTGRES_PASSWORD", "len": 32},
+          {"name": "POSTGRES_USER", "len": 8}
+        ]
+      }
+    ],
+    "images": [
+      {"repo_tag": "exenta-reports:dev", "id": "sha256:1a2b3c4d5e6f", "size": "412MB", "dangling": false, "used_by": ["exenta-reports-web"]},
+      {"repo_tag": "<none>:<none>", "id": "sha256:feedbeefcafe", "size": "1.2GB", "dangling": true, "used_by": []}
+    ],
+    "volumes": [
+      {"name": "pgdata", "driver": "local", "used_by": ["old-postgres"]}
+    ],
+    "networks": [
+      {"name": "bridge", "driver": "bridge", "containers": ["ha-bridge", "old-postgres"]},
+      {"name": "exenta-reports_default", "driver": "bridge", "containers": ["exenta-reports-web"]}
+    ],
+    "compose": [
+      {"name": "exenta-reports", "status": "running(1)", "config_files": ["/srv/deploy/exenta-reports/dev/docker-compose.yml"]}
+    ]
+  },
+  "env_files": [
+    {
+      "path": "/srv/deploy/exenta-reports/dev/.env",
+      "vars": [
+        {"name": "DATABASE_URL", "len": 61},
+        {"name": "SECRET_KEY", "len": 44}
+      ]
+    },
+    {
+      "path": "/opt/ha/.env",
+      "vars": [
+        {"name": "HA_TOKEN", "len": 183}
+      ]
+    }
+  ],
+  "listening": [
+    {"addr": "0.0.0.0", "port": 22, "process": "sshd"},
+    {"addr": "127.0.0.1", "port": 8101, "process": "docker-proxy"},
+    {"addr": "0.0.0.0", "port": 8123, "process": "docker-proxy"},
+    {"addr": "127.0.0.1", "port": 11434, "process": null}
+  ],
+  "systemd": {
+    "system_running": [
+      {"name": "docker.service", "description": "Docker Application Container Engine"},
+      {"name": "ollama.service", "description": "Ollama Service"}
+    ],
+    "system_timers": [
+      {"name": "apt-daily.timer", "next": "2026-09-14T06:12:00+00:00", "last": "2026-09-13T06:12:00+00:00"}
+    ],
+    "user_units": [
+      {"name": "md-editor.service", "load": "loaded", "active": "active", "sub": "running", "description": "Markdown editor"},
+      {"name": "cloudflared-tunnel.service", "load": "loaded", "active": "active", "sub": "running", "description": "Cloudflare tunnel"},
+      {"name": "backup-sync.service", "load": "loaded", "active": "inactive", "sub": "dead", "description": "Nightly backup sync"}
+    ],
+    "user_timers": [
+      {"name": "backup-sync.timer", "next": "2026-09-14T02:00:00+00:00", "last": "2026-09-13T02:00:00+00:00"}
+    ]
+  },
+  "cron": {
+    "user": ["0 2 * * * /home/matt/bin/backup-sync.sh"],
+    "system_crontab": [
+      "17 * * * * root cd / && run-parts --report /etc/cron.hourly",
+      "25 6 * * * root test -x /usr/sbin/anacron || run-parts --report /etc/cron.daily"
+    ],
+    "cron_d": [
+      {"file": "/etc/cron.d/certbot", "lines": ["0 */12 * * * root certbot -q renew"]}
+    ],
+    "periodic": {"hourly": [], "daily": ["logrotate"], "weekly": [], "monthly": []}
+  },
+  "ollama": {
+    "available": true,
+    "error": null,
+    "models": [
+      {"name": "qwen3:14b", "id": "7d7da9e3d3b2", "size": "9.3 GB", "modified": "2026-08-20T14:02:00Z"},
+      {"name": "nomic-embed-text:latest", "id": "0a109f422b47", "size": "274 MB", "modified": "2026-07-02T09:10:00Z"}
+    ],
+    "running": []
+  },
+  "files": {
+    "roots": [
+      {
+        "path": "/srv/deploy",
+        "size_bytes": 4831838208,
+        "entries": [
+          {"name": "exenta-reports", "kind": "dir", "size_bytes": 4294967296, "modified": "2026-09-10T08:02:11Z"},
+          {"name": "README.md", "kind": "file", "size_bytes": 1204, "modified": "2026-05-11T10:00:00Z"}
+        ]
+      },
+      {
+        "path": "/mnt/data/dr",
+        "size_bytes": null,
+        "entries": [
+          {"name": "warehouse", "kind": "dir", "size_bytes": null, "modified": "2026-09-01T00:00:00Z"}
+        ]
+      }
+    ],
+    "largest": [
+      {"path": "/mnt/data/dr/warehouse/fact_sales.parquet", "size_bytes": 2147483648},
+      {"path": "/srv/deploy/exenta-reports/dev/data/cache.db", "size_bytes": 536870912},
+      {"path": "/var/lib/docker/overlay2/abc123/diff/opt/model.bin", "size_bytes": 268435456}
+    ]
+  },
+  "warnings": ["root crontab not readable without sudo"]
+}

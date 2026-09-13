@@ -67,6 +67,14 @@
           },
           "ssh_user": {
             "type": "string"
+          },
+          "inventory_roots": {
+            "type": "array",
+            "description": "Extra file roots for dev host inventory, in addition to deploy_root",
+            "items": {
+              "type": "string",
+              "pattern": "^/"
+            }
           }
         }
       }
