@@ -37,3 +37,6 @@ Inspected 2026-09-13: IN Analytics runs as `flask-dev/cert/prod`, QA Operations 
 
 ## 2026-09-13 — Adoption lands on branch `platform/adopt`, never on the current branch
 `dev open --adopt` creates the branch from HEAD, writes `project/profile.yaml`, `deploy/target.yml`, docs stubs and `.gitignore` lines, and commits there. A dirty tree or a repository outside an identity folder is refused. An existing `CLAUDE.md` is kept; the platform import and facts block is prepended so nothing the project already said is lost. Reversible by deleting the branch (NFR-9).
+
+## 2026-09-13 — `mounts` in target.yml, host paths only under deploy_root
+First real project (platform-console) needs to read `deployments.jsonl` on the host. `deploy/target.yml` may declare `mounts: [{host, container, readonly}]`; the CLI refuses any host path outside the host's `deploy_root` so a project can never mount the docker socket or another tool's files (DEP-10). Default read-only.

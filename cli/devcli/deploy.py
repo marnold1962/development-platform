@@ -45,6 +45,16 @@ def _connect(target: dict) -> tuple[str, dict]:
     return alias, entry
 
 
+def _mounts_spec(target: dict, entry: dict) -> str:
+    """'host:container:ro,...' for the remote script. Host paths must sit under the host's deploy_root (DEP-10)."""
+    specs = []
+    for m in target.get("mounts", []):
+        if not m["host"].startswith(entry["deploy_root"].rstrip("/") + "/") and m["host"] != entry["deploy_root"]:
+            raise DevError(f"mount {m['host']} is outside the host deploy_root {entry['deploy_root']}; refused (DEP-10)", 2)
+        specs.append(f"{m['host']}:{m['container']}:{'ro' if m.get('readonly', True) else 'rw'}")
+    return ",".join(specs)
+
+
 def _approval_path(project: Path, env: str) -> Path:
     return project / ".platform" / f"approval-{env}.json"
 
@@ -153,7 +163,7 @@ def deploy(project: Path, env: str) -> int:
     print(f"push: {branch} -> {alias}:{bare}")
     gitops.run(["git", "push", "-q", f"ssh://{alias}{bare}", f"HEAD:refs/heads/{branch}"], project)
     print(f"deploy: {name} {env} {sha[:12]} on {alias}")
-    r = remote.remote(alias, entry, "deploy", name, env, sha, check=False)
+    r = remote.remote(alias, entry, "deploy", name, env, sha, _mounts_spec(target, entry), check=False)
     print((r.stdout + r.stderr).rstrip())
     ok = r.returncode == 0
     rec = {"time": dt.datetime.now().isoformat(timespec="seconds"), "env": env, "sha": sha, "ok": ok, "host": target["host"]}
@@ -171,7 +181,7 @@ def rollback(project: Path, env: str) -> int:
     profile, target = _project(project)
     _env(target, env)
     alias, entry = _connect(target)
-    r = remote.remote(alias, entry, "rollback", profile["name"], env, check=False)
+    r = remote.remote(alias, entry, "rollback", profile["name"], env, "-", _mounts_spec(target, entry), check=False)
     print((r.stdout + r.stderr).rstrip())
     if r.returncode != 0:
         raise DevError(f"rollback {env} refused or failed", r.returncode)

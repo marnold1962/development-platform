@@ -8,7 +8,8 @@
 #   health  <p> <env>            router + container + healthz; exit 0/1
 #   status  <p>                  last deployment per env as json lines
 set -euo pipefail
-ROOT="$1"; PORT="$2"; CMD="$3"; PROJ="${4:-}"; ENV="${5:-}"; SHA="${6:-}"
+ROOT="$1"; PORT="$2"; CMD="$3"; PROJ="${4:-}"; ENV="${5:-}"; SHA="${6:-}"; MOUNTS="${7:-}"
+mount_args() { local m; MA=(); IFS=, read -ra specs <<< "$MOUNTS"; for m in "${specs[@]}"; do [ -n "$m" ] && MA+=(-v "$m"); done; }
 NET=platform-net; ROUTER=platform-router
 log() { echo "[remote] $*"; }
 
@@ -59,7 +60,8 @@ case "$CMD" in
     ENVFILE="$ROOT/$PROJ/$ENV.env"; EF=()
     if [ -f "$ENVFILE" ]; then EF=(--env-file "$ENVFILE"); else log "no $ENVFILE; running without runtime secrets"; fi
     docker rm -f "$PROJ-$ENV" >/dev/null 2>&1 || true
-    docker run -d --name "$PROJ-$ENV" --network "$NET" --restart unless-stopped "${EF[@]}" \
+    mount_args
+    docker run -d --name "$PROJ-$ENV" --network "$NET" --restart unless-stopped "${EF[@]}" "${MA[@]}" \
       -e "PLATFORM_ENV=$ENV" -e "PLATFORM_COMMIT=$SHA" "$IMG" >/dev/null
     if healthz "$ENV"; then record "$ENV" "$SHA" "$IMG" true deploy; log "deployed $PROJ $ENV $SHA"; docker logs --tail 20 "$PROJ-$ENV" 2>&1 | sed 's/^/[log] /'
     else record "$ENV" "$SHA" "$IMG" false "deploy-failed-health"; docker logs --tail 40 "$PROJ-$ENV" 2>&1 | sed 's/^/[log] /'; exit 1; fi ;;
@@ -73,7 +75,8 @@ case "$CMD" in
     PSHA=$(grep "\"image\":\"$PREV\"" "$F" | tail -1 | sed 's/.*"sha":"\([^"]*\)".*/\1/')
     docker rm -f "$PROJ-$ENV" >/dev/null 2>&1 || true
     ENVFILE="$ROOT/$PROJ/$ENV.env"; EF=(); [ -f "$ENVFILE" ] && EF=(--env-file "$ENVFILE")
-    docker run -d --name "$PROJ-$ENV" --network "$NET" --restart unless-stopped "${EF[@]}" -e "PLATFORM_ENV=$ENV" -e "PLATFORM_COMMIT=$PSHA" "$PREV" >/dev/null
+    mount_args
+    docker run -d --name "$PROJ-$ENV" --network "$NET" --restart unless-stopped "${EF[@]}" "${MA[@]}" -e "PLATFORM_ENV=$ENV" -e "PLATFORM_COMMIT=$PSHA" "$PREV" >/dev/null
     if healthz "$ENV"; then record "$ENV" "$PSHA" "$PREV" true rollback; log "rolled back $PROJ $ENV to $PSHA"; else record "$ENV" "$PSHA" "$PREV" false rollback-failed-health; exit 1; fi ;;
   health)
     ok=0

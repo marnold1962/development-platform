@@ -93,3 +93,14 @@ def test_remote_script_and_router_present_and_valid():
     r = PLATFORM_ROOT / "scripts" / "deployment" / "remote"
     assert (r / "router.conf").exists()
     assert subprocess.run(["bash", "-n", str(r / "platform-remote.sh")]).returncode == 0
+
+
+def test_mounts_spec_requires_paths_under_deploy_root():
+    entry = {"deploy_root": "/home/matt/platform"}
+    ok = {"mounts": [{"host": "/home/matt/platform", "container": "/data/platform"}]}
+    assert deploy._mounts_spec(ok, entry) == "/home/matt/platform:/data/platform:ro"
+    rw = {"mounts": [{"host": "/home/matt/platform/x", "container": "/x", "readonly": False}]}
+    assert deploy._mounts_spec(rw, entry).endswith(":rw")
+    with pytest.raises(DevError):
+        deploy._mounts_spec({"mounts": [{"host": "/etc", "container": "/etc"}]}, entry)
+    assert deploy._mounts_spec({}, entry) == ""
