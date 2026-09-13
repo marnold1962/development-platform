@@ -8,4 +8,6 @@ containers:
   qa-operations-dev:  { host: aws-ec2, environment: dev,  application: QA Operations, note: "container flask-qa-dev, image qa-operations-flask-qa-dev" }
   qa-operations-cert: { host: aws-ec2, environment: cert, application: QA Operations, note: "container flask-qa-cert, image qa-operations-flask-qa-cert" }
   qa-operations-prod: { host: aws-ec2, environment: prod, application: QA Operations, note: "container flask-qa-prod, image qa-operations-flask-qa-prod" }
+  epic-tracker:       { host: aws-ec2, environment: prod, application: Epic Tracker,   note: "container flask-epic-tracker, image ai-analytics-flask-epic-tracker, host port 5009->5000, gunicorn; verified 2026-09-13" }
+  dev-planner:        { host: aws-ec2, environment: prod, application: Dev Planner,    note: "container flask-dev-planner, image ai-analytics-flask-dev-planner, host port 5010->5000, gunicorn; verified 2026-09-13" }
   platform-router:    { host: as2, environment: prod, application: platform, note: "nginx, 127.0.0.1:8200, network platform-net; routes /platform/<env>/<project>/ to <project>-<env>:5000" }
