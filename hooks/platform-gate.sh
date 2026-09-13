@@ -13,6 +13,10 @@ if printf '%s' "$cmd" | grep -Eq '(^|[;&| ])dev[[:space:]]+approve([[:space:];&|
 fi
 if printf '%s' "$cmd" | grep -Eq '(^|[;&| ])(dev[[:space:]]+deploy[[:space:]]+prod|\./?deploy/deploy\.sh[[:space:]]+prod|deploy\.sh[[:space:]]+prod)([[:space:];&|]|$)'; then
   DEV_BIN=$(command -v dev 2>/dev/null || echo "$HOME/.local/bin/dev")
+  # A command that starts with `cd <dir> &&` is checked in that dir, not the session cwd.
+  lead=$(printf '%s' "$cmd" | sed -nE 's/^[[:space:]]*cd[[:space:]]+([^&;|[:space:]]+)[[:space:]]*(&&|;).*/\1/p' | head -1)
+  case "$lead" in "~"*) lead="$HOME${lead#\~}";; esac
+  [ -n "$lead" ] && cwd="$lead"
   if ! (cd "${cwd:-.}" 2>/dev/null && "$DEV_BIN" approve prod --verify >/dev/null 2>&1); then
     deny "platform gate: no valid prod approval for HEAD. The user must run: dev approve prod"
   fi
